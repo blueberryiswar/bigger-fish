@@ -29,7 +29,10 @@ export default class Structure {
             let remainingHeight = this.roomLayoutSketch.length - (y + 1)
             for(let x = 0; x < currentFloor.length; x++) {
                 let currentRoom = currentFloor[x];
-                if(currentRoom) continue
+                if(currentRoom) {
+                    if(!currentRoom.requiresAdjacentRoom && currentRoom.y < y) currentRoom.requiresAdjacentRoom = true
+                    continue
+                }
                 let makeRoom = false
                 if(x !== 0) {
                     if(currentFloor[x-1] !== undefined && currentFloor[x-1].requiresAdjacentRoom) {
@@ -45,11 +48,14 @@ export default class Structure {
                 let remainingLength = currentFloor.length - (x + 1)
                             
                 let room = {
+                    x: x,
+                    y: y,
                     roomLength: Phaser.Math.Between(1,((3 > remainingLength) ? remainingLength : 3)),
                     roomHeight: Phaser.Math.Between(1,((3 > remainingHeight) ? remainingHeight : 3)),
                     name: "Room",
-                    requiresAdjacentRoom: (this.roomHeight === 1)
+                    requiresAdjacentRoom: null
                 }
+                room.requiresAdjacentRoom = ((room.roomHeight > 1) ? false : true)
           
                 for(let i = 0; i < room.roomLength; i++) {
                     currentFloor[x + i] = room
@@ -60,6 +66,7 @@ export default class Structure {
                 }
                 if(currentFloor[x]) {
                     currentFloor[x].name = `room ${x} ${y}`
+                    
                 }
                 
 
