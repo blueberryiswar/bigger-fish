@@ -1,5 +1,6 @@
 import PhaserLogo from '../objects/phaserLogo'
 import FpsText from '../objects/fpsText'
+import Structure from '../map/structure'
 
 export default class MainScene extends Phaser.Scene {
   fpsText
@@ -14,6 +15,8 @@ export default class MainScene extends Phaser.Scene {
      */
     new PhaserLogo(this, this.cameras.main.width / 2, 0)
     this.fpsText = new FpsText(this)
+
+    let map = new Structure(10, 8);
 
     // async/await example
     const pause = ms => {
