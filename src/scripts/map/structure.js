@@ -80,15 +80,16 @@ export default class Structure {
                     name: "Room",
                     requiresAdjacentRoom: null
                 }
+                if(room.width === 3) room.height = 1
                 room.requiresAdjacentRoom = ((room.height > 1) ? false : true)
 
                 for (let i = 0; i < room.width; i++) {
                     currentFloor[x + i] = room
+                    for (let iy = 0; iy < room.height; iy++) {
+                        this.roomLayoutSketch[y + iy][x] = room
+                    }
                 }
 
-                for (let i = 0; i < room.height; i++) {
-                    this.roomLayoutSketch[y + i][x] = room
-                }
                 if (currentFloor[x]) {
                     currentFloor[x].name = `room ${x} ${y}`
 
