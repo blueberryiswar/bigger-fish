@@ -7,6 +7,8 @@ export default class Structure {
     roomLayoutSketch
 
     constructor(x, y) {
+        this.width = x * 12 * 16
+        this.height = y * 10 * 16
         this.map = Array(y).fill().map(() => Array(x))
         //this.map[2][5] = this.roomFactory("Starting Room")
         console.log(this.map)
@@ -86,13 +88,12 @@ export default class Structure {
                 for (let i = 0; i < room.width; i++) {
                     currentFloor[x + i] = room
                     for (let iy = 0; iy < room.height; iy++) {
-                        this.roomLayoutSketch[y + iy][x] = room
+                        this.roomLayoutSketch[y + iy][x + i] = room
                     }
                 }
 
                 if (currentFloor[x]) {
                     currentFloor[x].name = `room ${x} ${y}`
-
                 }
 
 

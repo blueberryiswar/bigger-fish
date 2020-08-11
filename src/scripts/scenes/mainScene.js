@@ -15,11 +15,13 @@ export default class MainScene extends Phaser.Scene {
      */
     //snew PhaserLogo(this, this.cameras.main.width / 2, 0)
     this.fpsText = new FpsText(this)
+    this.player = {x: 80, y: 90}
 
     this.add.sprite(0, 0, "backgroundSpriteSheet", 0)
 
     let structure = new Structure(10, 8);
     let map = structure.map;
+
  
     for(let y = 0; y < map.length; y++) {
       for(let x = 0; x < map[y].length; x++) {
@@ -37,6 +39,13 @@ export default class MainScene extends Phaser.Scene {
     }
    
   }
+
+  setUpCamera() {
+		this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
+		this.cameras.main.setDeadzone(20, 20);
+		this.cameras.main.setBounds(0, 0, this.map.width, this.map.height);
+		this.cameras.main.setZoom(3);
+	}
 
   update() {
     this.fpsText.update()
