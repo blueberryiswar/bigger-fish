@@ -36,7 +36,9 @@ export default class Structure {
                 if(currentRoom) continue
                 let room = this.roomLayoutSketch[y][x]
                 if(room !== undefined) {
-                    console.log(this.roomFactory("Room", room))
+                    if(room.x === x && room.y === y) {
+                        this.map[y][x] = this.roomFactory("Room", room)
+                    }
                 }
                 console.log(`Room ${x} ${y}`, room)
             }
@@ -55,6 +57,7 @@ export default class Structure {
                     if (!currentRoom.requiresAdjacentRoom && currentRoom.y < y) currentRoom.requiresAdjacentRoom = true
                     continue
                 }
+
                 let makeRoom = false
                 if (x !== 0) {
                     if (currentFloor[x - 1] !== undefined && currentFloor[x - 1].requiresAdjacentRoom) {
