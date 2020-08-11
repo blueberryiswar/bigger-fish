@@ -1,6 +1,8 @@
 import PhaserLogo from '../objects/phaserLogo'
 import FpsText from '../objects/fpsText'
 import Structure from '../map/structure'
+import Controls from '../utils/controls'
+import Player from '../objects/player.js'
 
 export default class MainScene extends Phaser.Scene {
   fpsText
@@ -15,12 +17,15 @@ export default class MainScene extends Phaser.Scene {
      */
     //snew PhaserLogo(this, this.cameras.main.width / 2, 0)
     this.fpsText = new FpsText(this)
-    this.player = {x: 80, y: 90}
+    this.controls = new Controls(this)
+    this.player = new Player(this, 80, 80)
 
-    this.add.sprite(0, 0, "backgroundSpriteSheet", 0)
+    console.log(this)
+    
 
     let structure = new Structure(10, 8);
-    let map = structure.map;
+    this.map = structure.map;
+    const map = this.map
 
  
     for(let y = 0; y < map.length; y++) {
@@ -37,6 +42,7 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     }
+    this.setUpCamera();
    
   }
 
@@ -49,5 +55,13 @@ export default class MainScene extends Phaser.Scene {
 
   update() {
     this.fpsText.update()
+
+    if(this.controls.left()) this.player.setX(this.player.x - 4)
+    if(this.controls.up()) this.player.setY(this.player.y - 4)
+    if(this.controls.right()) {
+      this.player.setX(this.player.x + 4)
+      console.log
+    }
+    if(this.controls.down()) this.player.setY(this.player.y + 4)
   }
 }
