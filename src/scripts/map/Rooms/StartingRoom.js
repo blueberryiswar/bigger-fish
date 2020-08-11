@@ -1,10 +1,15 @@
-export class StartingRoom {
+export default class StartingRoom {
     name
     roomLayout
 
-    constructor(x, y) {
+    constructor(x, y, width, height) {
+        const tileSize = 16
+        this.x = x * tileSize
+        this.y = y * tileSize
+        this.width = width;
+        this.height = height;
         this.name = "Starting Room"
-        this.roomLayout = Array(y).fill().map(() => Array(x))
+        this.roomLayout = Array(height * tileSize).fill().map(() => Array(width * tileSize))
         console.log(this.roomLayout)
     }
 }

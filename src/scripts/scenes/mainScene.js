@@ -16,6 +16,8 @@ export default class MainScene extends Phaser.Scene {
     new PhaserLogo(this, this.cameras.main.width / 2, 0)
     this.fpsText = new FpsText(this)
 
+    //this.add.sprite(0, 0, backgroundSpriteSheet, 0)
+
     let map = new Structure(10, 8);
 
     // async/await example
