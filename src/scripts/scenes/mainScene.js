@@ -13,10 +13,10 @@ export default class MainScene extends Phaser.Scene {
     /**
      * Delete all the code below to start a fresh scene
      */
-    new PhaserLogo(this, this.cameras.main.width / 2, 0)
+    //snew PhaserLogo(this, this.cameras.main.width / 2, 0)
     this.fpsText = new FpsText(this)
 
-    //this.add.sprite(0, 0, backgroundSpriteSheet, 0)
+    this.add.sprite(0, 0, "backgroundSpriteSheet", 0)
 
     let map = new Structure(10, 8);
 

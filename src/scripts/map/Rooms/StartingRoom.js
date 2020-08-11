@@ -1,11 +1,12 @@
-export default class StartingRoom {
+export class StartingRoom {
     name
     roomLayout
 
     constructor(x, y, width, height) {
         const tileSize = 16
-        this.x = x * tileSize
-        this.y = y * tileSize
+        const defaultRoom = {x: 26, y:20}
+        this.x = x * tileSize * defaultRoom.x
+        this.y = y * tileSize * defaultRoom.y
         this.width = width;
         this.height = height;
         this.name = "Starting Room"

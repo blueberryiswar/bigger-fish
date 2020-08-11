@@ -1,4 +1,4 @@
-import StartingRoom from "./Rooms/StartingRoom"
+import { StartingRoom } from "./Rooms/StartingRoom"
 import Room from "./Rooms/Room"
 
 
@@ -8,14 +8,15 @@ export default class Structure {
 
     constructor(x, y) {
         this.map = Array(y).fill().map(() => Array(x))
-        this.map[2][5] = this.roomFactory("Starting Room")
+        //this.map[2][5] = this.roomFactory("Starting Room")
         console.log(this.map)
         this.generateRoomLayoutSketch()
 
     }
 
-    roomFactory(room) {
-        switch (room) {
+    
+    roomFactory(type, room) {
+        switch (type) {
             case "Starting Room":
                 const startingRoom = new StartingRoom(room.x, room.y, room.width, room.height)
                 return startingRoom
@@ -25,6 +26,22 @@ export default class Structure {
             default:
                 return null
         }
+    }
+    
+    generateRooms() {
+        for(let y=0; y < this.map.length; y++) {
+            let currentFloor = this.map[y]
+            for(let x = 0; x < currentFloor.length; x++) {
+                let currentRoom = currentFloor[x]
+                if(currentRoom) continue
+                let room = this.roomLayoutSketch[y][x]
+                if(room !== undefined) {
+                    console.log(this.roomFactory("Room", room))
+                }
+                console.log(`Room ${x} ${y}`, room)
+            }
+        }
+        console.log(this.map)
     }
 
     generateRoomLayoutSketch() {
@@ -79,6 +96,7 @@ export default class Structure {
 
         }
         console.log("Room Layout", this.roomLayoutSketch)
+        this.generateRooms()
     }
 
 
