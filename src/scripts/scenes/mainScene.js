@@ -25,6 +25,8 @@ export default class MainScene extends Phaser.Scene {
 
     let structure = new Structure(10, 8);
     this.map = structure.map;
+    this.zoomState = 0
+    this.interruptZoom = false
     const map = this.map
 
  
@@ -51,7 +53,29 @@ export default class MainScene extends Phaser.Scene {
 		this.cameras.main.setDeadzone(20, 20);
 		this.cameras.main.setBounds(0, 0, this.map.width, this.map.height);
 		this.cameras.main.setZoom(3);
-	}
+  }
+  
+  setZoom() {
+    if(this.interruptZoom) return
+    this.interruptZoom = true
+    switch(this.zoomState) {
+      case 0:
+        this.cameras.main.setZoom(0.5)
+        this.zoomState = 1
+        break
+      case 1:
+        this.cameras.main.setZoom(0.25)
+        this.zoomState = 2
+        break
+      case 2:
+        this.cameras.main.setZoom(1)
+        this.zoomState = 3
+        break
+      case 3:
+        this.cameras.main.setZoom(3)
+        this.zoomState = 0
+    }
+  }
 
   update() {
     this.fpsText.update()
@@ -63,5 +87,12 @@ export default class MainScene extends Phaser.Scene {
       console.log
     }
     if(this.controls.down()) this.player.setY(this.player.y + 4)
+    if(this.controls.showDebug.isDown) {
+      console.log(`${this.interruptZoom} ${this.zoomState}`)
+      this.setZoom()
+      
+    } else {
+      this.interruptZoom = false
+    }
   }
 }

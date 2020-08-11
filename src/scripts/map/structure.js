@@ -67,7 +67,8 @@ export default class Structure {
                     }
                 } else {
                     let decisions = Phaser.Math.Between(0, 3)
-                    if (decisions > 0) makeRoom = true
+                    //if (decisions > 0) makeRoom = true
+                    makeRoom = true
                 }
                 if (!makeRoom) continue
 
