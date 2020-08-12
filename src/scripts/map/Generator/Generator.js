@@ -4,6 +4,8 @@ export default class Generator {
     constructor(width, height, options) {
         this.options = options
         this.map = Array(height).fill().map(() => Array(width))
+        this.height = height
+        this.width = width
     }
 
     generateMap() {
@@ -13,7 +15,7 @@ export default class Generator {
             let stairsOnFloor = ((y > 0) ? 2 : 1)
             const targetRoom = currentFloor.filter(room => room.height > 1)
             for (let x = 0; x < currentFloor.length; x++) {
-                let currentRoom = currentFloor[x];
+                const currentRoom = currentFloor[x];
                 if (currentRoom) {
                     if (!currentRoom.requiresAdjacentRoom && currentRoom.y < y) currentRoom.requiresAdjacentRoom = true
                     continue
@@ -26,7 +28,6 @@ export default class Generator {
                 if (x !== 0) {
                     if (currentFloor[x - 1] !== undefined && currentFloor[x - 1].requiresAdjacentRoom) {
                         makeRoom = true
-                        room.addNeighbour(currentFloor[x - 1])
                     } else if (targetRoom.length > 0 && targetRoom[0].x < x) {
                         makeRoom = true
                     }
@@ -59,8 +60,26 @@ export default class Generator {
                 console.log(`Found no staircase on Floor ${y}`)
             }
         }
+        this.setNeighbours()
         console.log("Room Layout", this.map)
         
+    }
+
+    setNeighbours() {
+        let lastRoom = []
+        for(let y = 0; y < this.map.length; y++) {
+            for(let x = 0; x < this.map.length; x++) {
+                let room = this.map[y][x]
+                if(!room) continue
+                if(lastRoom.includes(room.name)) continue
+                lastRoom.push(room.name)
+                for(let i = 0; i<room.height; i++) {
+                    if(room.width + room.x < this.width && this.map[y+i][room.x + room.width]) room.addNeighbour(this.map[y+i][room.x + room.width])
+                    if(room.x > 0 && this.map[y+i][room.x-1]) room.addNeighbour(this.map[y+i][x-1])
+                }
+                
+            }
+        }
     }
 
     getMap() {

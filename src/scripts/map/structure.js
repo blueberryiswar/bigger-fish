@@ -40,8 +40,6 @@ export default class Structure {
         for (let y = 0; y < this.map.length; y++) {
             let currentFloor = this.map[y]
             for (let x = 0; x < currentFloor.length; x++) {
-                let currentRoom = currentFloor[x]
-                
                 const room = this.roomLayoutSketch[y][x]
                 if (room !== undefined && !room.placeholder) {
                     if (room.x === x && room.y === y) {

@@ -9,6 +9,7 @@ export default class RoomPlaceholder {
         this.name = `Room ${y} ${x}`
         this.requiresAdjacentRoom = false
         this.neighbours = []
+        this.neighbourDoors = []
         this.setDefaultDoors()
     }
 
@@ -24,16 +25,24 @@ export default class RoomPlaceholder {
             if (otherRoom.x === room.x && otherRoom.y === room.y) return true
         }
         this.neighbours.push(room)
-        this.createDoorToNeighbour(room)
+        if(!this.hasDoorToNeighbour(room)) this.createDoorToNeighbour(room)
         room.addNeighbour(this)
+    }
+
+    hasDoorToNeighbour(neighbour) {
+        for(let i = 0; i < this.neighbourDoors.length; i++) {
+            if(neighbour.name === this.neighbourDoors[i]) {
+                return true
+            }
+        }
+        return false
     }
 
     createDoorToNeighbour(neighbour) {
         let floor = 0
+        this.neighbourDoors.push(neighbour.name)
         if(neighbour.y > this.y) floor = this.y + this.height - neighbour.y
-        console.log([this.doors, floor, this.y, neighbour.y])
-        const side = ((this.x < neighbour.x) ? 0 : 1)
+        const side = ((this.x < neighbour.x) ? 1 : 0)
         this.doors[floor][side] = true
-        console.log([this, neighbour])
     }
 }

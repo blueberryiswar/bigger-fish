@@ -27,15 +27,15 @@ export default class Room {
     }
 
     makeDoors() {
-        const width = this.roomLayout[0].length
+        const width = this.roomLayout[0].length - 1
         const roomHeight = this.defaults.roomSize.y
-
+        console.log(this.doors)
         for(let i = 0; i < this.doors.length; i++) {
             for(let side = 0; side < this.doors[i].length; side++) {
+                if(!this.doors[i][side]) continue
                 let pos = ((side === 0) ? side : width)
-                console.log(`Side: ${pos}`)
                 for(let c = 1; c < 4; c++) {
-                    const posY = roomHeight * this.doors[i].height - c - 1
+                    let posY = roomHeight * (i+1) - c - 1
                     if(!this.roomLayout[posY]) continue
                     this.roomLayout[posY][pos] = 1
                 }
