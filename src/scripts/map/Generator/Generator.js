@@ -1,3 +1,5 @@
+import RoomPlaceholder from "./RoomPlaceholder"
+
 export default class Generator {
     constructor(width, height, options) {
         this.options = options
@@ -29,17 +31,10 @@ export default class Generator {
                 }
                 if (!makeRoom) continue
 
-                let remainingLength = currentFloor.length - (x + 1)
+                const remainingLength = currentFloor.length - (x + 1)
 
-                let room = {
-                    placeholder: false,
-                    x: x,
-                    y: y,
-                    width: Phaser.Math.Between(1, ((3 > remainingLength) ? remainingLength : 3)),
-                    height: Phaser.Math.Between(1, ((3 > remainingHeight) ? remainingHeight : 3)),
-                    name: "Room",
-                    requiresAdjacentRoom: null,
-                }
+                const room = new RoomPlaceholder(x, y, remainingHeight, remainingLength, this.options)
+                   
                 //if(room.width === 3) room.height = 1
                 if (room.height > 1) stairsOnFloor--
                 room.requiresAdjacentRoom = (((room.height > 1) && stairsOnFloor <= 0) ? false : true)
