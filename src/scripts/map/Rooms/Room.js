@@ -1,13 +1,14 @@
 export default class Room {
 
-    constructor(x, y, width, height, defaults, name) {
+    constructor(room, defaults, name) {
         this.defaults = defaults
-        this.x = x * this.defaults.roomSize.x * this.defaults.tileSize
-        this.y = y * this.defaults.tileSize * this.defaults.roomSize.y
-        this.width = width;
-        this.height = height;
+        this.x = room.x * this.defaults.roomSize.x * this.defaults.tileSize
+        this.y = room.y * this.defaults.tileSize * this.defaults.roomSize.y
+        this.width = room.width
+        this.height = room.height
+        this.doors = []
         this.name = name;
-        this.roomLayout = Array(this.defaults.roomSize.y * height).fill().map(() => Array(this.defaults.roomSize.x * width))
+        this.roomLayout = Array(this.defaults.roomSize.y * room.height).fill().map(() => Array(this.defaults.roomSize.x * room.width))
         //this.roomLayout = this.getRoomLayout(`${height}x${width}`);
         this.makeRoomLayout()
     }
@@ -19,19 +20,26 @@ export default class Room {
             this.roomLayout[y].fill(1)
             this.roomLayout[y][0] = 0
             this.roomLayout[y][this.roomLayout[y].length -1] = 0
-            this.makeDoor()
         }
+        this.makeDoors()
         this.roomLayout[this.roomLayout.length -1].fill(0)
     }
 
-    makeDoor() {
+    makeDoors() {
         const width = this.roomLayout[0].length
-        const height = this.roomLayout.length
+        const roomHeight = this.defaults.roomSize.y
 
-        for(let i = 1; i < 4; i++) {
-            this.roomLayout[height - i][0] = 1
-            this.roomLayout[height - i][width] = 1
+        for(let i = 0; i < this.doors.length; i++) {
+            let pos = ((this.doors[i].wall === "left") ? 0 : width)
+            console.log(`Door to the ${this.doors[i].wall} wall at ${this.doors[i].height} - ${pos}`)
+            
+            for(let c = 1; c < 4; c++) {
+                const posY = roomHeight * this.doors[i].height - c - 1
+                if(!this.roomLayout[posY]) continue
+                this.roomLayout[posY][pos] = 1
+            }
         }
+        
     }
 
     getRoomLayout(size) {
