@@ -18,7 +18,7 @@ export default class MainScene extends Phaser.Scene {
     //snew PhaserLogo(this, this.cameras.main.width / 2, 0)
     this.fpsText = new FpsText(this)
     this.controls = new Controls(this)
-    this.player = new Player(this, 80, 80)
+    
 
     console.log(this)
     
@@ -44,6 +44,7 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     }
+    this.player = new Player(this, 80, 80)
     this.setUpCamera();
    
   }
@@ -77,16 +78,18 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  update() {
+  update(time, delta) {
     this.fpsText.update()
 
-    if(this.controls.left()) this.player.setX(this.player.x - 4)
-    if(this.controls.up()) this.player.setY(this.player.y - 4)
+    const speed = 20 * delta / 100
+
+    if(this.controls.left()) this.player.setX(this.player.x - speed)
+    if(this.controls.up()) this.player.setY(this.player.y - speed)
     if(this.controls.right()) {
-      this.player.setX(this.player.x + 4)
-      console.log
+      this.player.setX(this.player.x + speed)
+      console.log(delta)
     }
-    if(this.controls.down()) this.player.setY(this.player.y + 4)
+    if(this.controls.down()) this.player.setY(this.player.y + speed)
     if(this.controls.showDebug.isDown) {
       console.log(`${this.interruptZoom} ${this.zoomState}`)
       this.setZoom()
