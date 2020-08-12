@@ -6,11 +6,12 @@ export default class Structure {
     map
     roomLayoutSketch
 
-    constructor(x, y) {
+    constructor(x, y, defaults) {
         this.width = x * 12 * 16
         this.height = y * 10 * 16
         this.map = Array(y).fill().map(() => Array(x))
-        this.startingRoom = {x: 0, y:0}
+        this.defaults = defaults
+        this.startingRoom = null
         //this.map[2][5] = this.roomFactory("Starting Room")
         console.log(this.map)
         this.generateRoomLayoutSketch()
@@ -21,11 +22,11 @@ export default class Structure {
     roomFactory(type, room) {
         switch (type) {
             case "Starting Room":
-                const startingRoom = new StartingRoom(room.x, room.y, room.width, room.height)
+                const startingRoom = new StartingRoom(room.x, room.y, room.width, room.height, this.defaults)
                 console.log(startingRoom)
                 return startingRoom
             case "Room":
-                const regularRoom = new Room(room.x, room.y, room.width, room.height, room.name)
+                const regularRoom = new Room(room.x, room.y, room.width, room.height, this.defaults, room.name)
                 return regularRoom
             default:
                 return null
@@ -79,7 +80,7 @@ export default class Structure {
                         makeRoom = true
                     }
                 } else {
-                    let decisions = Phaser.Math.Between(0, 3)
+                    //let decisions = Phaser.Math.Between(0, 3)
                     //if (decisions > 0) makeRoom = true
                     makeRoom  = true
                 }

@@ -1,24 +1,20 @@
 export default class Room {
 
-    constructor(x, y, width, height, name) {
-        const tileSize = 16
-        const defaultRoom = {
-            x: 12,
-            y: 10
-        }
-        this.x = x * tileSize * defaultRoom.x
-        this.y = y * tileSize * defaultRoom.y
+    constructor(x, y, width, height, defaults, name) {
+        this.defaults = defaults
+        this.x = x * this.defaults.roomSize.x * this.defaults.tileSize
+        this.y = y * this.defaults.tileSize * this.defaults.roomSize.y
         this.width = width;
         this.height = height;
         this.name = name;
-        this.roomLayout = Array(defaultRoom.y * height).fill().map(() => Array(defaultRoom.x * width))
+        this.roomLayout = Array(this.defaults.roomSize.y * height).fill().map(() => Array(this.defaults.roomSize.x * width))
         //this.roomLayout = this.getRoomLayout(`${height}x${width}`);
         this.makeRoomLayout()
     }
 
     makeRoomLayout() {
 
-        this.roomLayout[0].fill(0)
+        this.roomLayout[0].fill(0).map(() => this.defaults.defaultWallTiles[Phaser.Math.Between(0, this.defaults.defaultWallTiles.length)])
         for(let y = 1; y < this.roomLayout.length; y++) {
             this.roomLayout[y].fill(1)
             this.roomLayout[y][0] = 0

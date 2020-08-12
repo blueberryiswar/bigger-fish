@@ -5,9 +5,11 @@ export default class PreloadScene extends Phaser.Scene {
 
   preload() {
     this.load.image('phaser-logo', 'assets/img/phaser-logo.png')
-    this.load.spritesheet('backgroundSpriteSheet', 'assets/img/testSpriteSheet.png', {
+    this.load.spritesheet('backgroundSpriteSheet', 'assets/img/testSpriteSheet.extruded.png', {
       frameWidth: 16,
-      frameHeight: 16
+      frameHeight: 16,
+      margin: 1,
+      spacing: 2
     })
   }
 

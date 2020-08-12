@@ -23,7 +23,15 @@ export default class MainScene extends Phaser.Scene {
     console.log(this)
     
 
-    this.structure = new Structure(10, 8);
+    const defaults = {
+      tileSize: 16,
+      tileSet: "backgroundSpriteSheet",
+      roomSize: {x: 12, y: 16},
+      defaultWallTiles: [0],
+      defaultBackgroundTiles: [1],
+
+    }
+    this.structure = new Structure(10, 8, defaults);
     this.zoomState = 0
     this.interruptZoom = false
     const map = this.structure.map
