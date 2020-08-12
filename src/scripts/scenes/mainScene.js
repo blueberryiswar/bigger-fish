@@ -23,11 +23,10 @@ export default class MainScene extends Phaser.Scene {
     console.log(this)
     
 
-    let structure = new Structure(10, 8);
-    this.map = structure.map;
+    this.structure = new Structure(10, 8);
     this.zoomState = 0
     this.interruptZoom = false
-    const map = this.map
+    const map = this.structure.map
 
  
     for(let y = 0; y < map.length; y++) {
@@ -44,7 +43,7 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     }
-    this.player = new Player(this, 80, 80)
+    this.player = new Player(this, this.structure.startingRoom.x + 90, this.structure.startingRoom.y + 90)
     this.setUpCamera();
    
   }
@@ -52,7 +51,7 @@ export default class MainScene extends Phaser.Scene {
   setUpCamera() {
 		this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
 		this.cameras.main.setDeadzone(20, 20);
-		this.cameras.main.setBounds(0, 0, this.map.width, this.map.height);
+		this.cameras.main.setBounds(0, 0, this.structure.map.width, this.structure.map.height);
 		this.cameras.main.setZoom(3);
   }
   

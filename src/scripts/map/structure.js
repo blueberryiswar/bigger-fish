@@ -1,4 +1,4 @@
-import { StartingRoom } from "./Rooms/StartingRoom"
+import StartingRoom from "./Rooms/StartingRoom"
 import Room from "./Rooms/Room"
 
 
@@ -10,6 +10,7 @@ export default class Structure {
         this.width = x * 12 * 16
         this.height = y * 10 * 16
         this.map = Array(y).fill().map(() => Array(x))
+        this.startingRoom = {x: 0, y:0}
         //this.map[2][5] = this.roomFactory("Starting Room")
         console.log(this.map)
         this.generateRoomLayoutSketch()
@@ -21,6 +22,7 @@ export default class Structure {
         switch (type) {
             case "Starting Room":
                 const startingRoom = new StartingRoom(room.x, room.y, room.width, room.height)
+                console.log(startingRoom)
                 return startingRoom
             case "Room":
                 const regularRoom = new Room(room.x, room.y, room.width, room.height, room.name)
@@ -31,6 +33,7 @@ export default class Structure {
     }
     
     generateRooms() {
+        let hasStartingRoom = false
         for(let y=0; y < this.map.length; y++) {
             let currentFloor = this.map[y]
             for(let x = 0; x < currentFloor.length; x++) {
@@ -39,10 +42,16 @@ export default class Structure {
                 let room = this.roomLayoutSketch[y][x]
                 if(room !== undefined) {
                     if(room.x === x && room.y === y) {
-                        this.map[y][x] = this.roomFactory("Room", room)
+                        if(!hasStartingRoom && room.width === 1) {
+                            this.map[y][x] = this.roomFactory("Starting Room", room)
+                            this.startingRoom = this.map[y][x]
+                            hasStartingRoom = true
+                        } else {
+                            this.map[y][x] = this.roomFactory("Room", room)
+                        }
+                        
                     }
                 }
-                console.log(`Room ${x} ${y}`, room)
             }
         }
         console.log(this.map)
@@ -51,8 +60,10 @@ export default class Structure {
     generateRoomLayoutSketch() {
         this.roomLayoutSketch = Array(this.map.length).fill().map(() => Array(this.map[0].length));
         for (let y = 0; y < this.roomLayoutSketch.length; y++) {
-            let currentFloor = this.roomLayoutSketch[y]
-            let remainingHeight = this.roomLayoutSketch.length - (y + 1)
+            const currentFloor = this.roomLayoutSketch[y]
+            const remainingHeight = this.roomLayoutSketch.length - (y + 1)
+            let stairsOnFloor = ((y > 0) ? 2 : 1)
+            const targetRoom = currentFloor.filter(room => room.height > 1)
             for (let x = 0; x < currentFloor.length; x++) {
                 let currentRoom = currentFloor[x];
                 if (currentRoom) {
@@ -64,14 +75,15 @@ export default class Structure {
                 if (x !== 0) {
                     if (currentFloor[x - 1] !== undefined && currentFloor[x - 1].requiresAdjacentRoom) {
                         makeRoom = true
+                    } else if (targetRoom.length > 0 && targetRoom[0].x < x) {
+                        makeRoom = true
                     }
                 } else {
                     let decisions = Phaser.Math.Between(0, 3)
                     //if (decisions > 0) makeRoom = true
-                    makeRoom = true
+                    makeRoom  = true
                 }
                 if (!makeRoom) continue
-
 
                 let remainingLength = currentFloor.length - (x + 1)
 
@@ -83,8 +95,11 @@ export default class Structure {
                     name: "Room",
                     requiresAdjacentRoom: null
                 }
-                if(room.width === 3) room.height = 1
-                room.requiresAdjacentRoom = ((room.height > 1) ? false : true)
+                //if(room.width === 3) room.height = 1
+                if(room.height > 1) stairsOnFloor--
+                room.requiresAdjacentRoom = (((room.height > 1) && stairsOnFloor <= 0) ? false : true)
+                if(room.width > 2 && currentFloor[x+2]) room.width = 2
+                if(room.width > 1 && currentFloor[x+1]) room.width = 1
 
                 for (let i = 0; i < room.width; i++) {
                     currentFloor[x + i] = room
@@ -99,7 +114,12 @@ export default class Structure {
 
 
             }
-
+            const floorHasStairs = currentFloor.filter(room => (room.y + room.height -1) >= y && room.height > 1)
+            console.log(floorHasStairs)
+            if(floorHasStairs.length === 0) {
+                this.roomLayoutSketch[y] = currentFloor.map(() => undefined)
+                console.log(`Found no staircase on Floor ${y}`)
+            }
         }
         console.log("Room Layout", this.roomLayoutSketch)
         this.generateRooms()
