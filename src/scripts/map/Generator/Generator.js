@@ -19,10 +19,14 @@ export default class Generator {
                     continue
                 }
 
+                const remainingLength = currentFloor.length - (x + 1)
+                const room = new RoomPlaceholder(x, y, remainingHeight, remainingLength, this.options)
+
                 let makeRoom = false
                 if (x !== 0) {
                     if (currentFloor[x - 1] !== undefined && currentFloor[x - 1].requiresAdjacentRoom) {
                         makeRoom = true
+                        room.addNeighbour(currentFloor[x - 1])
                     } else if (targetRoom.length > 0 && targetRoom[0].x < x) {
                         makeRoom = true
                     }
@@ -30,10 +34,6 @@ export default class Generator {
                     makeRoom = true
                 }
                 if (!makeRoom) continue
-
-                const remainingLength = currentFloor.length - (x + 1)
-
-                const room = new RoomPlaceholder(x, y, remainingHeight, remainingLength, this.options)
                    
                 //if(room.width === 3) room.height = 1
                 if (room.height > 1) stairsOnFloor--

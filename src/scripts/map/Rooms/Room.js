@@ -6,11 +6,12 @@ export default class Room {
         this.y = room.y * this.defaults.tileSize * this.defaults.roomSize.y
         this.width = room.width
         this.height = room.height
-        this.doors = []
+        this.doors = room.doors
         this.name = name;
         this.roomLayout = Array(this.defaults.roomSize.y * room.height).fill().map(() => Array(this.defaults.roomSize.x * room.width))
         //this.roomLayout = this.getRoomLayout(`${height}x${width}`);
         this.makeRoomLayout()
+        console.log(this)
     }
 
     makeRoomLayout() {
@@ -30,14 +31,16 @@ export default class Room {
         const roomHeight = this.defaults.roomSize.y
 
         for(let i = 0; i < this.doors.length; i++) {
-            let pos = ((this.doors[i].wall === "left") ? 0 : width)
-            console.log(`Door to the ${this.doors[i].wall} wall at ${this.doors[i].height} - ${pos}`)
-            
-            for(let c = 1; c < 4; c++) {
-                const posY = roomHeight * this.doors[i].height - c - 1
-                if(!this.roomLayout[posY]) continue
-                this.roomLayout[posY][pos] = 1
+            for(let side = 0; side < this.doors[i].length; side++) {
+                let pos = ((side === 0) ? side : width)
+                console.log(`Side: ${pos}`)
+                for(let c = 1; c < 4; c++) {
+                    const posY = roomHeight * this.doors[i].height - c - 1
+                    if(!this.roomLayout[posY]) continue
+                    this.roomLayout[posY][pos] = 1
+                }
             }
+    
         }
         
     }
