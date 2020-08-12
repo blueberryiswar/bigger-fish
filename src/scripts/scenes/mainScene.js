@@ -26,31 +26,16 @@ export default class MainScene extends Phaser.Scene {
     const defaults = {
       tileSize: 16,
       tileSet: "backgroundSpriteSheet",
-      roomSize: {x: 12, y: 16},
+      roomSize: {x: 28, y: 16},
       defaultWallTiles: [0],
       defaultBackgroundTiles: [1],
-
     }
-    this.structure = new Structure(10, 8, defaults);
+    this.structure = new Structure(10, 8, defaults, this);
     this.zoomState = 0
     this.interruptZoom = false
-    const map = this.structure.map
+    this.structure.drawMap();
 
- 
-    for(let y = 0; y < map.length; y++) {
-      for(let x = 0; x < map[y].length; x++) {
-        if(map[y][x] !== undefined) {
-          for(let posY = 0; posY < map[y][x].roomLayout.length; posY++) {
-            for(let posX = 0; posX < map[y][x].roomLayout[posY].length; posX++) {
-              let sx = 8 + map[y][x].x + posX * 16;
-              let sy = 8 + map[y][x].y + posY * 16;
-              this.add.sprite(sx, sy, "backgroundSpriteSheet", map[y][x].roomLayout[posY][posX])
-              //console.log(sx,sy, "backgroundSpriteSheet", map[y][x].roomLayout[posY][posX])
-            }
-          }
-        }
-      }
-    }
+    
     this.player = new Player(this, this.structure.startingRoom.x + 90, this.structure.startingRoom.y + 90)
     this.setUpCamera();
    
@@ -90,13 +75,13 @@ export default class MainScene extends Phaser.Scene {
 
     const speed = 20 * delta / 100
 
-    if(this.controls.left()) this.player.setX(this.player.x - speed)
-    if(this.controls.up()) this.player.setY(this.player.y - speed)
+    if(this.controls.left()) this.player.setX(Phaser.Math.FloorTo(this.player.x - speed))
+    if(this.controls.up()) this.player.setY(Phaser.Math.FloorTo(this.player.y - speed))
     if(this.controls.right()) {
-      this.player.setX(this.player.x + speed)
-      console.log(delta)
+      this.player.setX(Phaser.Math.FloorTo(this.player.x + speed))
+      console.log(Phaser.Math.FloorTo((this.player.x + speed)/16))
     }
-    if(this.controls.down()) this.player.setY(this.player.y + speed)
+    if(this.controls.down()) this.player.setY(Phaser.Math.FloorTo(this.player.y + speed))
     if(this.controls.showDebug.isDown) {
       console.log(`${this.interruptZoom} ${this.zoomState}`)
       this.setZoom()

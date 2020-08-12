@@ -6,9 +6,10 @@ export default class Structure {
     map
     roomLayoutSketch
 
-    constructor(x, y, defaults) {
+    constructor(x, y, defaults, scene) {
         this.width = x * 12 * 16
         this.height = y * 10 * 16
+        this.scene = scene
         this.map = Array(y).fill().map(() => Array(x))
         this.defaults = defaults
         this.startingRoom = null
@@ -18,7 +19,7 @@ export default class Structure {
 
     }
 
-    
+
     roomFactory(type, room) {
         switch (type) {
             case "Starting Room":
@@ -32,25 +33,25 @@ export default class Structure {
                 return null
         }
     }
-    
+
     generateRooms() {
         let hasStartingRoom = false
-        for(let y=0; y < this.map.length; y++) {
+        for (let y = 0; y < this.map.length; y++) {
             let currentFloor = this.map[y]
-            for(let x = 0; x < currentFloor.length; x++) {
+            for (let x = 0; x < currentFloor.length; x++) {
                 let currentRoom = currentFloor[x]
-                if(currentRoom) continue
+                if (currentRoom) continue
                 let room = this.roomLayoutSketch[y][x]
-                if(room !== undefined) {
-                    if(room.x === x && room.y === y) {
-                        if(!hasStartingRoom && room.width === 1) {
+                if (room !== undefined) {
+                    if (room.x === x && room.y === y) {
+                        if (!hasStartingRoom && room.width === 1) {
                             this.map[y][x] = this.roomFactory("Starting Room", room)
                             this.startingRoom = this.map[y][x]
                             hasStartingRoom = true
                         } else {
                             this.map[y][x] = this.roomFactory("Room", room)
                         }
-                        
+
                     }
                 }
             }
@@ -82,7 +83,7 @@ export default class Structure {
                 } else {
                     //let decisions = Phaser.Math.Between(0, 3)
                     //if (decisions > 0) makeRoom = true
-                    makeRoom  = true
+                    makeRoom = true
                 }
                 if (!makeRoom) continue
 
@@ -97,10 +98,10 @@ export default class Structure {
                     requiresAdjacentRoom: null
                 }
                 //if(room.width === 3) room.height = 1
-                if(room.height > 1) stairsOnFloor--
+                if (room.height > 1) stairsOnFloor--
                 room.requiresAdjacentRoom = (((room.height > 1) && stairsOnFloor <= 0) ? false : true)
-                if(room.width > 2 && currentFloor[x+2]) room.width = 2
-                if(room.width > 1 && currentFloor[x+1]) room.width = 1
+                if (room.width > 2 && currentFloor[x + 2]) room.width = 2
+                if (room.width > 1 && currentFloor[x + 1]) room.width = 1
 
                 for (let i = 0; i < room.width; i++) {
                     currentFloor[x + i] = room
@@ -115,9 +116,9 @@ export default class Structure {
 
 
             }
-            const floorHasStairs = currentFloor.filter(room => (room.y + room.height -1) >= y && room.height > 1)
+            const floorHasStairs = currentFloor.filter(room => (room.y + room.height - 1) >= y && room.height > 1)
             console.log(floorHasStairs)
-            if(floorHasStairs.length === 0) {
+            if (floorHasStairs.length === 0) {
                 this.roomLayoutSketch[y] = currentFloor.map(() => undefined)
                 console.log(`Found no staircase on Floor ${y}`)
             }
@@ -126,5 +127,19 @@ export default class Structure {
         this.generateRooms()
     }
 
-
+    drawMap() {
+        for (let y = 0; y < this.map.length; y++) {
+            for (let x = 0; x < this.map[y].length; x++) {
+                if (this.map[y][x] !== undefined) {
+                    for (let posY = 0; posY < this.map[y][x].roomLayout.length; posY++) {
+                        for (let posX = 0; posX < this.map[y][x].roomLayout[posY].length; posX++) {
+                            let sx = this.defaults.tileSize / 2 + this.map[y][x].x + posX * this.defaults.tileSize;
+                            let sy = this.defaults.tileSize / 2 + this.map[y][x].y + posY * this.defaults.tileSize;
+                            this.scene.add.sprite(sx, sy, this.defaults.tileSet, this.map[y][x].roomLayout[posY][posX])
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

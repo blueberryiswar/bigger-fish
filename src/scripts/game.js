@@ -15,10 +15,11 @@ const config = {
     parent: 'phaser-game',
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT
-  },
-  pixelArt: true,
+    height: DEFAULT_HEIGHT,
+    pixelArt: true,
   roudPixels: true,
+  },
+  
   scene: [PreloadScene, MainScene],
   physics: {
     default: 'arcade',
