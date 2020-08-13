@@ -43,10 +43,10 @@ export default class MainScene extends Phaser.Scene {
   }
 
   setUpCamera() {
-		this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
-		this.cameras.main.setDeadzone(20, 20);
+		this.cameras.main.startFollow(this.player, true, 0.2, 0.2, 0, 40);
+		this.cameras.main.setDeadzone(20, 5);
 		this.cameras.main.setBounds(0, 0, this.structure.map.width, this.structure.map.height);
-		this.cameras.main.setZoom(3);
+		this.cameras.main.setZoom(4);
   }
   
   setZoom() {
