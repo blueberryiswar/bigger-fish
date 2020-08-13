@@ -12,6 +12,10 @@ export default class Structure {
     constructor(x, y, defaults, scene) {
         this.width = x
         this.height = y
+        this.widthInTiles = x * defaults.roomSize.x
+        this.heightInTiles = y * defaults.roomSize.y
+        this.widthInPixel = x * defaults.tileSize * defaults.roomSize.x
+        this.heightInPixel = y * defaults.tileSize * defaults.roomSize.y
         this.scene = scene
         this.map = Array(y).fill().map(() => Array(x))
         this.defaults = defaults
