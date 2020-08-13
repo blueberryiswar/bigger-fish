@@ -68,7 +68,7 @@ export default class Generator {
     setNeighbours() {
         let lastRoom = []
         for(let y = 0; y < this.map.length; y++) {
-            for(let x = 0; x < this.map.length; x++) {
+            for(let x = 0; x < this.map[y].length; x++) {
                 let room = this.map[y][x]
                 if(!room) continue
                 if(lastRoom.includes(room.name)) continue
