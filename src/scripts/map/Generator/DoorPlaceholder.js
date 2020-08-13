@@ -12,19 +12,17 @@ export class DoorPlaceholder {
     }
 
     connectRooms() {
-        if(this.roomA.y + this.roomA.height > this.roomB.y + this.roomB.height) {
-            this.globalY = (this.roomB.y + this.roomB.height) * this.roomB.defaults.roomSize.y - this.height - 1
-            this.y = this.roomB.height * this.roomB.defaults.roomSize.y - this.height - 1
-        } else {
-            this.globalY = (this.roomA.y + this.roomA.height) * this.roomA.defaults.roomSize.y - this.height - 1
-            this.y = this.roomA.height * this.roomA.defaults.roomSize.y - this.height - 1
-        }
+        let diffY = (this.roomA.y + this.roomA.height - this.roomB.y - this.roomB.height) * this.roomA.defaults.roomSize.y
+        if(diffY < 0) diffY = 0
+        this.globalY = (this.roomA.y + this.roomA.height) * this.roomA.defaults.roomSize.y - diffY - this.height - 1
+        this.y = this.roomA.height * this.roomA.defaults.roomSize.y - diffY - this.height - 1
+        
         if(this.roomA.x > this.roomB.x) {
-            this.globalX = this.roomA.x * this.roomA.defaults.roomSize.x -1
+            this.globalX = this.roomA.x * this.roomA.defaults.roomSize.x
             this.x = 0
         } else {
-            this.globalX = this.roomB.x * this.roomB.defaults.roomSize.x - 1
-            this.x = this.roomA.width * this.roomA.defaults.roomSize.x -1
+            this.globalX = (this.roomA.x + this.roomA.width) * this.roomA.defaults.roomSize.x - 1
+            this.x = this.roomA.width * this.roomA.defaults.roomSize.x - 1
         }
         this.name = "Own Door"
 

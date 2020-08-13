@@ -28,7 +28,7 @@ export default class RoomPlaceholder {
         this.neighbours.push(room)
         let door = null
         if(!this.hasDoorToNeighbour(room)) door = this.createDoorToNeighbour(room)
-        if(!room.hasDoorToNeighbour(this)) room.createDoorAtLocation(this, door)
+        //if(!room.hasDoorToNeighbour(this)) room.createDoorAtLocation(this, door)
     }
 
     hasDoorToNeighbour(neighbour) {
