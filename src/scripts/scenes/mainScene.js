@@ -31,6 +31,7 @@ export default class MainScene extends Phaser.Scene {
       defaultBackgroundTiles: [1],
     }
     this.structure = new Structure(10, 8, defaults, this);
+    //this.structure = new Structure(4,4,defaults, this)
     this.zoomState = 0
     this.interruptZoom = false
     this.structure.drawMap();

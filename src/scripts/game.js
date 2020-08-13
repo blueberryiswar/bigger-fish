@@ -17,7 +17,7 @@ const config = {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT,
     pixelArt: true,
-  roudPixels: true,
+    roundPixels: true,
   },
   
   scene: [PreloadScene, MainScene],

@@ -11,7 +11,7 @@ export default class Generator {
     generateMap() {
         for (let y = 0; y < this.map.length; y++) {
             const currentFloor = this.map[y]
-            const remainingHeight = this.map.length - (y + 1)
+            const remainingHeight = this.map.length - y
             let stairsOnFloor = ((y > 0) ? 2 : 1)
             const targetRoom = currentFloor.filter(room => room.height > 1)
             for (let x = 0; x < currentFloor.length; x++) {

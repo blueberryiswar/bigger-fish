@@ -1,3 +1,5 @@
+import { DoorPlaceholder } from "./DoorPlaceholder"
+
 export default class RoomPlaceholder {
     constructor(x, y, remainingHeight, remainingLength, defaults) {
         this.x = x
@@ -9,8 +11,7 @@ export default class RoomPlaceholder {
         this.name = `Room ${y} ${x}`
         this.requiresAdjacentRoom = false
         this.neighbours = []
-        this.neighbourDoors = []
-        this.setDefaultDoors()
+        //this.setDefaultDoors()
     }
 
     setDefaultDoors() {
@@ -25,24 +26,25 @@ export default class RoomPlaceholder {
             if (otherRoom.x === room.x && otherRoom.y === room.y) return true
         }
         this.neighbours.push(room)
-        if(!this.hasDoorToNeighbour(room)) this.createDoorToNeighbour(room)
-        room.addNeighbour(this)
+        let door = null
+        if(!this.hasDoorToNeighbour(room)) door = this.createDoorToNeighbour(room)
+        if(!room.hasDoorToNeighbour(this)) room.createDoorAtLocation(this, door)
     }
 
     hasDoorToNeighbour(neighbour) {
-        for(let i = 0; i < this.neighbourDoors.length; i++) {
-            if(neighbour.name === this.neighbourDoors[i]) {
-                return true
-            }
-        }
-        return false
+        return !!this.doors.filter(door => door.roomB.name === neighbour.name).length
     }
 
     createDoorToNeighbour(neighbour) {
-        let floor = 0
-        this.neighbourDoors.push(neighbour.name)
-        if(neighbour.y > this.y) floor = this.y + this.height - neighbour.y
-        const side = ((this.x < neighbour.x) ? 1 : 0)
-        this.doors[floor][side] = true
+        let myDoor = new DoorPlaceholder(this, neighbour)
+        myDoor.connectRooms()
+        this.doors.push(myDoor)
+        return myDoor
+    }
+
+    createDoorAtLocation(room, door) {
+        const myDoor = new DoorPlaceholder(room, this)
+        myDoor.connectRoomsAtLocation(door)
+        room.doors.push(myDoor)
     }
 }
