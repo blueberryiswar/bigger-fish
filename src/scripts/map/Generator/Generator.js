@@ -61,6 +61,8 @@ export default class Generator {
             }
         }
         this.setNeighbours()
+        let connectedRooms = this.testPath()
+        this.cleanMap(connectedRooms)
         console.log("Room Layout", this.map)
         
     }
@@ -78,6 +80,42 @@ export default class Generator {
                     if(room.x > 0 && this.map[y+i][room.x-1]) room.addNeighbour(this.map[y+i][room.x-1])
                 }
                 
+            }
+        }
+    }
+
+    testPath() {
+        let room = this.getFirstRoom()
+        const roomsVisited = []
+        let hasNewRooms = true
+        const roomList = []
+
+        while (room) {
+            roomsVisited.push(room.name)
+            for(let i =0; i < room.doors.length; i++) {
+                let otherRoom = room.doors[i].roomB
+                if(!roomsVisited.includes(otherRoom.name)) roomList.push(otherRoom)
+            }
+            room = roomList.pop()
+        }
+        return roomsVisited
+    }
+
+    getFirstRoom() {
+        for(let y=0; y < this.map.length; y++) {
+            for (let x=0; x < this.map[y].length; x++) {
+                if(this.map[x][y]) return this.map[x][y]
+            }
+        }
+        return
+    }
+
+    cleanMap(goodRooms) {
+        for(let y = 0; y < this.height; y++) {
+            for(let x = 0; x < this.width; x++) {
+                if(this.map[y][x] && !goodRooms.includes(this.map[y][x].name)) {
+                    this.map[y][x] = null
+                }
             }
         }
     }
