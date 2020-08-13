@@ -74,8 +74,8 @@ export default class Generator {
                 if(lastRoom.includes(room.name)) continue
                 lastRoom.push(room.name)
                 for(let i = 0; i<room.height; i++) {
-                    if(room.width + room.x < this.width && this.map[y+i][room.x + room.width]) room.addNeighbour(this.map[y+i][room.x + room.width])
-                    if(room.x > 0 && this.map[y+i][room.x-1]) room.addNeighbour(this.map[y+i][x-1])
+                    if(room.width + room.x <= this.width && this.map[y+i][room.x + room.width]) room.addNeighbour(this.map[y+i][room.x + room.width])
+                    if(room.x > 0 && this.map[y+i][room.x-1]) room.addNeighbour(this.map[y+i][room.x-1])
                 }
                 
             }

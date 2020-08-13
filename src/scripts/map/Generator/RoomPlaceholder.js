@@ -14,12 +14,6 @@ export default class RoomPlaceholder {
         //this.setDefaultDoors()
     }
 
-    setDefaultDoors() {
-        for(let i = 0; i < this.height; i++) {
-            this.doors.push([false, false])
-        }
-    }
-
     addNeighbour(room) {
         for(let i = 0; i < this.neighbours.length; i++) {
             let otherRoom = this.neighbours[i]
