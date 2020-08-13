@@ -10,8 +10,8 @@ export default class Structure {
     roomLayoutSketch
 
     constructor(x, y, defaults, scene) {
-        this.width = x * 12 * 16
-        this.height = y * 10 * 16
+        this.width = x
+        this.height = y
         this.scene = scene
         this.map = Array(y).fill().map(() => Array(x))
         this.defaults = defaults
@@ -42,9 +42,8 @@ export default class Structure {
     generateRooms() {
         let hasStartingRoom = false
         let hasTargetRoom = false
-        for (let y = 0; y < this.map.length; y++) {
-            let currentFloor = this.map[y]
-            for (let x = 0; x < currentFloor.length; x++) {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
                 const room = this.roomLayoutSketch[y][x]
                 if (room !== undefined) {
                     if (room.x === x && room.y === y) {
