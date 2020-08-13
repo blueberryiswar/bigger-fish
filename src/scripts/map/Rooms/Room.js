@@ -7,22 +7,24 @@ export default class Room {
         this.width = room.width
         this.height = room.height
         this.doors = room.doors
-        this.name = name;
+        this.name = name
+        this.wallTile = 0
+        this.backgroundTile = 1
         this.roomLayout = Array(this.defaults.roomSize.y * room.height).fill().map(() => Array(this.defaults.roomSize.x * room.width))
         //this.roomLayout = this.getRoomLayout(`${height}x${width}`);
-        this.makeRoomLayout()
+        
     }
 
     makeRoomLayout() {
 
         this.roomLayout[0].fill(0).map(() => this.defaults.defaultWallTiles[Phaser.Math.Between(0, this.defaults.defaultWallTiles.length)])
         for(let y = 1; y < this.roomLayout.length; y++) {
-            this.roomLayout[y].fill(1)
-            this.roomLayout[y][0] = 0
-            this.roomLayout[y][this.roomLayout[y].length -1] = 0
+            this.roomLayout[y].fill(this.backgroundTile)
+            this.roomLayout[y][0] = this.wallTile
+            this.roomLayout[y][this.roomLayout[y].length -1] = this.wallTile
         }
         this.makeDoors()
-        this.roomLayout[this.roomLayout.length -1].fill(0)
+        this.roomLayout[this.roomLayout.length -1].fill(this.wallTile)
     }
 
     makeDoors() {

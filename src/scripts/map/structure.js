@@ -1,6 +1,8 @@
 import StartingRoom from "./Rooms/StartingRoom"
 import Room from "./Rooms/Room"
 import Generator from "./Generator/Generator"
+import TargetRoom from "./Rooms/TargetRoom"
+import TreasureRoom from "./Rooms/TreasureRoom"
 
 
 export default class Structure {
@@ -25,12 +27,13 @@ export default class Structure {
     roomFactory(type, room) {
         switch (type) {
             case "Starting Room":
-                const startingRoom = new StartingRoom(room, this.defaults)
-                console.log(startingRoom)
-                return startingRoom
+                return new StartingRoom(room, this.defaults)
+            case "Target Room":
+                return new TargetRoom(room, this.defaults)
+            case "Treasure Room":
+                return new TreasureRoom(room, this.defaults)
             case "Room":
-                const regularRoom = new Room(room, this.defaults, room.name)
-                return regularRoom
+                return new Room(room, this.defaults, room.name)
             default:
                 return null
         }
@@ -38,20 +41,28 @@ export default class Structure {
 
     generateRooms() {
         let hasStartingRoom = false
+        let hasTargetRoom = false
         for (let y = 0; y < this.map.length; y++) {
             let currentFloor = this.map[y]
             for (let x = 0; x < currentFloor.length; x++) {
                 const room = this.roomLayoutSketch[y][x]
-                if (room !== undefined && !room.placeholder) {
+                if (room !== undefined) {
                     if (room.x === x && room.y === y) {
+                        let type = "Room"
                         if (!hasStartingRoom && room.width === 1) {
-                            this.map[y][x] = this.roomFactory("Starting Room", room)
-                            this.startingRoom = this.map[y][x]
+                            type = "Starting Room"
                             hasStartingRoom = true
-                        } else {
-                            this.map[y][x] = this.roomFactory("Room", room)
+                        } else if(hasStartingRoom && !hasTargetRoom && room.doors.length === 1) {
+                            type = "Target Room"
+                            hasTargetRoom = true
+                        } else if(room.doors.length === 1) {
+                            type = "Treasure Room"
                         }
-                        this.rooms.push(this.map[y][x])
+                        const newRoom = this.roomFactory(type, room)
+                        this.map[y][x] = newRoom
+                        if (type = "Starting Room") this.startingRoom = newRoom
+                        this.rooms.push(newRoom)
+                        newRoom.makeRoomLayout()
                     }
                 }
             }
