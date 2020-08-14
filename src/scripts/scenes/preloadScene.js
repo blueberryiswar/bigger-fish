@@ -11,6 +11,12 @@ export default class PreloadScene extends Phaser.Scene {
       margin: 1,
       spacing: 2
     })
+    this.load.spritesheet('metal', 'assets/img/metalPlate.extruded.png', {
+      frameWidth: 16,
+      frameHeight: 16,
+      margin: 1,
+      spacing: 2
+    })
   }
 
   create() {

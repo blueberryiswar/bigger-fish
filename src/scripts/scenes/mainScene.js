@@ -16,7 +16,7 @@ export default class MainScene extends Phaser.Scene {
      * Delete all the code below to start a fresh scene
      */
     //snew PhaserLogo(this, this.cameras.main.width / 2, 0)
-    this.fpsText = new FpsText(this)
+    //this.fpsText = new FpsText(this)
     this.controls = new Controls(this)
     
 
@@ -25,11 +25,24 @@ export default class MainScene extends Phaser.Scene {
 
     const defaults = {
       tileSize: 16,
-      tileSet: "backgroundSpriteSheet",
+      tileSet: "metal",
       roomSize: {x: 28, y: 16},
-      defaultWallTiles: [0],
-      defaultBackgroundTiles: [1],
+      defaultBackgroundTile: 27,
+      backgroundTileFrom: 0,
+      backgroundTileTo: 59,
+      innerWall: {
+        leftTop: 97,
+        rightTop: 98,
+        leftBottom: 99,
+        rightBottom: 100,
+        left: 101,
+        top: 111,
+        bottom: 113,
+        left: 115,
+        right: 117
+      }
     }
+
     this.structure = new Structure(10, 8, defaults, this);
     //this.structure = new Structure(4,4,defaults, this)
     this.zoomState = 0
@@ -72,21 +85,17 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    this.fpsText.update()
+   
 
     const speed = 20 * delta / 100
 
     if(this.controls.left()) this.player.setX(Phaser.Math.FloorTo(this.player.x - speed))
     if(this.controls.up()) this.player.setY(Phaser.Math.FloorTo(this.player.y - speed))
-    if(this.controls.right()) {
-      this.player.setX(Phaser.Math.FloorTo(this.player.x + speed))
-      console.log(Phaser.Math.FloorTo((this.player.x + speed)/16))
-    }
+    if(this.controls.right()) this.player.setX(Phaser.Math.FloorTo(this.player.x + speed))
     if(this.controls.down()) this.player.setY(Phaser.Math.FloorTo(this.player.y + speed))
     if(this.controls.showDebug.isDown) {
       console.log(`${this.interruptZoom} ${this.zoomState}`)
       this.setZoom()
-      
     } else {
       this.interruptZoom = false
     }

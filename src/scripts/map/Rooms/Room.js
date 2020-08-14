@@ -17,14 +17,36 @@ export default class Room {
 
     makeRoomLayout() {
 
-        this.roomLayout[0].fill(0).map(() => this.defaults.defaultWallTiles[Phaser.Math.Between(0, this.defaults.defaultWallTiles.length)])
-        for(let y = 1; y < this.roomLayout.length; y++) {
-            this.roomLayout[y].fill(this.backgroundTile)
-            this.roomLayout[y][0] = this.wallTile
-            this.roomLayout[y][this.roomLayout[y].length -1] = this.wallTile
+        //this.roomLayout[0].fill(0).map(() => this.defaults.defaultWallTiles[Phaser.Math.Between(0, this.defaults.defaultWallTiles.length)])
+        for(let y = 0; y < this.roomLayout.length; y++) {
+            for(let x = 0; x < this.roomLayout[y].length; x++) {
+                if (Phaser.Math.Between(0, 2) < 2) {
+                    this.roomLayout[y][x] = this.defaults.defaultBackgroundTile
+                } else {
+                    this.roomLayout[y][x] = Phaser.Math.Between(this.defaults.backgroundTileFrom, this.defaults.backgroundTileTo)
+                }
+                
+            }
         }
+        this.makeWalls()
         this.makeDoors()
-        this.roomLayout[this.roomLayout.length -1].fill(this.wallTile)
+        console.log(this.roomLayout)
+    }
+   
+    makeWalls() {
+        this.roomLayout[0][0] = this.defaults.innerWall.leftTop
+        this.roomLayout[0][this.roomLayout[0].length - 1] = this.defaults.innerWall.rightTop
+        this.roomLayout[this.roomLayout.length - 1][0] = this.defaults.innerWall.leftBottom
+        this.roomLayout[this.roomLayout.length - 1][this.roomLayout[0].length - 1] = this.defaults.innerWall.rightBottom
+        for(let i = 1; i < this.roomLayout[0].length -1; i++) {
+            this.roomLayout[0][i] = this.defaults.innerWall.top
+            this.roomLayout[this.roomLayout.length - 1][i] = this.defaults.innerWall.bottom
+        }
+        for(let i = 1; i < this.roomLayout.length - 1; i++) {
+            this.roomLayout[i][0] = this.defaults.innerWall.left
+            this.roomLayout[i][this.roomLayout[0].length - 1] = this.defaults.innerWall.right
+        }
+
     }
 
     makeDoors() {
@@ -36,7 +58,7 @@ export default class Room {
             console.log(`Door: ${this.doors[i].name} this.roomLayout[${this.doors[i].y}][${this.doors[i].x}]`)
             if(this.roomLayout[this.doors[i].y]) {
                 for (let dy = 0; dy < this.doors[i].height; dy++) {
-                    this.roomLayout[this.doors[i].y + dy][this.doors[i].x] = 4
+                    this.roomLayout[this.doors[i].y + dy][this.doors[i].x] = this.defaults.defaultBackgroundTile
                 } 
             }
         }
