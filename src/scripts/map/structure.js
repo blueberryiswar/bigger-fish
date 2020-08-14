@@ -3,7 +3,7 @@ import Room from "./Rooms/Room"
 import Generator from "./Generator/Generator"
 import TargetRoom from "./Rooms/TargetRoom"
 import TreasureRoom from "./Rooms/TreasureRoom"
-import BackgroundTile from "../objects/BackgroundTile"
+import InteractableObjects from "../Groups/InteractableObjects"
 
 
 export default class Structure {
@@ -26,6 +26,7 @@ export default class Structure {
         this.generator = new Generator(x, y, defaults)
         this.roomLayoutSketch = this.generator.getMap()
         this.walls = null
+        this.interactableObjects = new InteractableObjects(scene.physics.world, scene)
         this.generateRooms();
     }
 
@@ -33,13 +34,13 @@ export default class Structure {
     roomFactory(type, room) {
         switch (type) {
             case "Starting Room":
-                return new StartingRoom(room, this.defaults)
+                return new StartingRoom(room, this.defaults, this.interactableObjects)
             case "Target Room":
-                return new TargetRoom(room, this.defaults)
+                return new TargetRoom(room, this.defaults, this.interactableObjects)
             case "Treasure Room":
-                return new TreasureRoom(room, this.defaults)
+                return new TreasureRoom(room, this.defaults, this.interactableObjects)
             case "Room":
-                return new Room(room, this.defaults, room.name)
+                return new Room(room, this.defaults, this.interactableObjects, room.name)
             default:
                 return null
         }
@@ -85,9 +86,9 @@ export default class Structure {
                     let y = this.defaults.tileSize / 2 + this.rooms[i].y + posY * this.defaults.tileSize;
                     //sprite = new BackgroundTile(this.scene, x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
                     if(this.rooms[i].roomLayout[posY][posX] <= this.defaults.backgroundTileTo) {
-                        this.scene.add.image(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
+                        this.scene.add.image(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX]).setZ(1)
                     } else {
-                        this.walls.create(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
+                        this.walls.create(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX]).setZ(1)
                     }
                     
                     //this.walls.create(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])

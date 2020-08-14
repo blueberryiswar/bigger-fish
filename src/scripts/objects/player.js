@@ -32,7 +32,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.scene.controls.left()) {
             this.setVelocityX(this.speed * -1)
             if(this.facing !== "left") {
-                console.log(this)
                 this.setFlipX(true)
                 this.facing = "left"
             }

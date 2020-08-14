@@ -1,6 +1,6 @@
 export default class Room {
 
-    constructor(room, defaults, name) {
+    constructor(room, defaults, objects, name) {
         this.defaults = defaults
         this.x = room.x * this.defaults.roomSize.x * this.defaults.tileSize
         this.y = room.y * this.defaults.tileSize * this.defaults.roomSize.y
@@ -8,6 +8,7 @@ export default class Room {
         this.height = room.height
         this.doors = room.doors
         this.name = name
+        this.objects = objects
         this.wallTiles = this.defaults.innerWall
         this.roomLayout = Array(this.defaults.roomSize.y * room.height).fill().map(() => Array(this.defaults.roomSize.x * room.width))
         //this.roomLayout = this.getRoomLayout(`${height}x${width}`);
@@ -51,7 +52,6 @@ export default class Room {
     makeDoors() {
         const width = this.roomLayout[0].length - 1
         const roomHeight = this.defaults.roomSize.y
-        console.log(this)
         
         for(let i = 0; i < this.doors.length; i++) {
             console.log(`Door: ${this.doors[i].name} this.roomLayout[${this.doors[i].y}][${this.doors[i].x}]`)
@@ -59,6 +59,10 @@ export default class Room {
                 for (let dy = 0; dy < this.doors[i].height; dy++) {
                     this.roomLayout[this.doors[i].y + dy][this.doors[i].x] = this.defaults.defaultBackgroundTile
                 } 
+            }
+            if(this.doors[i].side === "left") {
+                console.log("Make Door")
+                this.objects.createDoor(this.doors[i].getConfig())
             }
         }
     
