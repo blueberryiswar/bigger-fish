@@ -26,7 +26,9 @@ export default class Structure {
         this.generator = new Generator(x, y, defaults)
         this.roomLayoutSketch = this.generator.getMap()
         this.walls = null
-        this.interactableObjects = new InteractableObjects(scene.physics.world, scene)
+        this.doors = []
+        this.doorGroup = new InteractableObjects(scene.physics.world, scene)
+        //this.interactableObjects = new InteractableObjects(scene.physics.world, scene)
         this.generateRooms();
     }
 
@@ -34,13 +36,13 @@ export default class Structure {
     roomFactory(type, room) {
         switch (type) {
             case "Starting Room":
-                return new StartingRoom(room, this.defaults, this.interactableObjects)
+                return new StartingRoom(room, this.defaults, this)
             case "Target Room":
-                return new TargetRoom(room, this.defaults, this.interactableObjects)
+                return new TargetRoom(room, this.defaults, this)
             case "Treasure Room":
-                return new TreasureRoom(room, this.defaults, this.interactableObjects)
+                return new TreasureRoom(room, this.defaults, this)
             case "Room":
-                return new Room(room, this.defaults, this.interactableObjects, room.name)
+                return new Room(room, this.defaults, this, room.name)
             default:
                 return null
         }
@@ -94,6 +96,9 @@ export default class Structure {
                     //this.walls.create(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
                 }
             }
+        }
+        for (let i = 0; i < this.doors.length; i++) {
+            this.doorGroup.createDoor(this.doors[i])
         }
     }
 }

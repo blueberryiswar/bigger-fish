@@ -18,7 +18,6 @@ export default class MainScene extends Phaser.Scene {
     //snew PhaserLogo(this, this.cameras.main.width / 2, 0)
     //this.fpsText = new FpsText(this)
     this.controls = new Controls(this)
-    
 
     console.log(this)
     
@@ -64,12 +63,17 @@ export default class MainScene extends Phaser.Scene {
     this.zoomState = 0
     this.interruptZoom = false
     this.structure.drawMap();
-
+  
     
     this.player = new Player(this, this.structure.startingRoom.x + 90, this.structure.startingRoom.y + 90)
     this.physics.add.collider(this.player, this.structure.walls)
+    this.physics.add.collider(this.player, this.structure.doorGroup, this.handleCollision)
     this.setUpCamera();
    
+  }
+
+  handleCollision(active, target) {
+    target.openDoor()
   }
 
   setUpCamera() {
