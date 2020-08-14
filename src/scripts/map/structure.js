@@ -3,6 +3,7 @@ import Room from "./Rooms/Room"
 import Generator from "./Generator/Generator"
 import TargetRoom from "./Rooms/TargetRoom"
 import TreasureRoom from "./Rooms/TreasureRoom"
+import BackgroundTile from "../objects/BackgroundTile"
 
 
 export default class Structure {
@@ -24,6 +25,7 @@ export default class Structure {
         //this.map[2][5] = this.roomFactory("Starting Room")
         this.generator = new Generator(x, y, defaults)
         this.roomLayoutSketch = this.generator.getMap()
+        this.walls = null
         this.generateRooms();
     }
 
@@ -49,7 +51,7 @@ export default class Structure {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 const room = this.roomLayoutSketch[y][x]
-                if (room !== undefined) {
+                if (room) {
                     if (room.x === x && room.y === y) {
                         let type = "Room"
                         if (!hasStartingRoom && room.width === 1) {
@@ -75,12 +77,20 @@ export default class Structure {
     }
 
     drawMap() {
+        this.walls = this.scene.physics.add.staticGroup();
         for (let i = 0; i < this.rooms.length; i++) {
             for (let posY = 0; posY < this.rooms[i].roomLayout.length; posY++) {
                 for (let posX = 0; posX < this.rooms[i].roomLayout[posY].length; posX++) {
                     let x = this.defaults.tileSize / 2 + this.rooms[i].x + posX * this.defaults.tileSize;
                     let y = this.defaults.tileSize / 2 + this.rooms[i].y + posY * this.defaults.tileSize;
-                    this.scene.add.sprite(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
+                    //sprite = new BackgroundTile(this.scene, x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
+                    if(this.rooms[i].roomLayout[posY][posX] <= this.defaults.backgroundTileTo) {
+                        this.scene.add.image(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
+                    } else {
+                        this.walls.create(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
+                    }
+                    
+                    //this.walls.create(x, y, this.defaults.tileSet, this.rooms[i].roomLayout[posY][posX])
                 }
             }
         }
