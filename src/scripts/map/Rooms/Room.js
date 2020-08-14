@@ -8,8 +8,7 @@ export default class Room {
         this.height = room.height
         this.doors = room.doors
         this.name = name
-        this.wallTile = 0
-        this.backgroundTile = 1
+        this.wallTiles = this.defaults.innerWall
         this.roomLayout = Array(this.defaults.roomSize.y * room.height).fill().map(() => Array(this.defaults.roomSize.x * room.width))
         //this.roomLayout = this.getRoomLayout(`${height}x${width}`);
         
@@ -34,17 +33,17 @@ export default class Room {
     }
    
     makeWalls() {
-        this.roomLayout[0][0] = this.defaults.innerWall.leftTop
-        this.roomLayout[0][this.roomLayout[0].length - 1] = this.defaults.innerWall.rightTop
-        this.roomLayout[this.roomLayout.length - 1][0] = this.defaults.innerWall.leftBottom
-        this.roomLayout[this.roomLayout.length - 1][this.roomLayout[0].length - 1] = this.defaults.innerWall.rightBottom
+        this.roomLayout[0][0] = this.wallTiles.leftTop
+        this.roomLayout[0][this.roomLayout[0].length - 1] = this.wallTiles.rightTop
+        this.roomLayout[this.roomLayout.length - 1][0] = this.wallTiles.leftBottom
+        this.roomLayout[this.roomLayout.length - 1][this.roomLayout[0].length - 1] = this.wallTiles.rightBottom
         for(let i = 1; i < this.roomLayout[0].length -1; i++) {
-            this.roomLayout[0][i] = this.defaults.innerWall.top
-            this.roomLayout[this.roomLayout.length - 1][i] = this.defaults.innerWall.bottom
+            this.roomLayout[0][i] = this.wallTiles.top
+            this.roomLayout[this.roomLayout.length - 1][i] = this.wallTiles.bottom
         }
         for(let i = 1; i < this.roomLayout.length - 1; i++) {
-            this.roomLayout[i][0] = this.defaults.innerWall.left
-            this.roomLayout[i][this.roomLayout[0].length - 1] = this.defaults.innerWall.right
+            this.roomLayout[i][0] = this.wallTiles.left
+            this.roomLayout[i][this.roomLayout[0].length - 1] = this.wallTiles.right
         }
 
     }
