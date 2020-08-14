@@ -47,6 +47,20 @@ export default class Room {
             this.roomLayout[i][this.roomLayout[0].length - 1] = this.wallTiles.right
         }
 
+        if(this.height > 1) {
+            const pStart = Phaser.Math.FloorTo(this.roomLayout[0].length / 4)
+            for(let hi = 1; hi < this.height; hi++) {
+                for(let i = 0; i < this.roomLayout[0].length /2; i++) {
+                    let py = this.y + (this.height - hi) * this.defaults.roomSize.y * 16 + 3 * 16 - 8
+                    let px = this.x + pStart * 16 + i * 16 + 8
+                    this.structure.platforms.push({
+                        sprite: this.defaults.platform.middle,
+                        x: px,
+                        y: py
+                    })
+                }
+            }
+        } 
     }
 
     makeDoors() {
@@ -58,7 +72,27 @@ export default class Room {
             if(this.roomLayout[this.doors[i].y]) {
                 for (let dy = 0; dy < this.doors[i].height; dy++) {
                     this.roomLayout[this.doors[i].y + dy][this.doors[i].x] = this.defaults.defaultBackgroundTile
-                } 
+                }
+                if(this.height > 1) {
+                    let py = this.y + this.doors[i].y * 16 + this.doors[i].height * 16 + 8
+                    let sx = -16
+                    if(this.doors[i].side === "left") {
+                        sx = 16
+                    }
+                    for (let ii = 0; ii < 3; ii++) {
+                        this.structure.platforms.push({
+                            sprite: this.defaults.platform.middle,
+                            x: this.x + this.doors[i].x * 16 + sx * ii + sx/2,
+                            y: py
+                        })
+                    }
+                    this.structure.platforms.push({
+                        sprite: ((sx === 1) ? this.defaults.platform.right : this.defaults.platform.left),
+                        x: this.x + this.doors[i].x * 16 + sx * 3 + sx/2,
+                        y: py
+                    })
+                    
+                }
             }
             if(this.doors[i].side === "left") {
                 this.structure.doors.push(this.doors[i].getConfig())

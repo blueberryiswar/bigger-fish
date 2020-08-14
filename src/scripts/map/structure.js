@@ -25,8 +25,9 @@ export default class Structure {
         //this.map[2][5] = this.roomFactory("Starting Room")
         this.generator = new Generator(x, y, defaults)
         this.roomLayoutSketch = this.generator.getMap()
-        this.walls = null
+        this.walls = this.scene.physics.add.staticGroup()
         this.doors = []
+        this.platforms = []
         this.doorGroup = new InteractableObjects(scene.physics.world, scene)
         //this.interactableObjects = new InteractableObjects(scene.physics.world, scene)
         this.generateRooms();
@@ -80,7 +81,7 @@ export default class Structure {
     }
 
     drawMap() {
-        this.walls = this.scene.physics.add.staticGroup();
+  
         for (let i = 0; i < this.rooms.length; i++) {
             for (let posY = 0; posY < this.rooms[i].roomLayout.length; posY++) {
                 for (let posX = 0; posX < this.rooms[i].roomLayout[posY].length; posX++) {
@@ -99,6 +100,11 @@ export default class Structure {
         }
         for (let i = 0; i < this.doors.length; i++) {
             this.doorGroup.createDoor(this.doors[i])
+        }
+        
+        for(let i = 0; i < this.platforms.length; i++) {
+            console.log(this.platforms[i])
+            this.walls.create(this.platforms[i].x, this.platforms[i].y, this.defaults.tileSet, this.platforms[i].sprite)
         }
     }
 }

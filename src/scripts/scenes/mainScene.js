@@ -8,7 +8,9 @@ export default class MainScene extends Phaser.Scene {
   fpsText
 
   constructor() {
-    super({ key: 'MainScene' })
+    super({
+      key: 'MainScene'
+    })
   }
 
   create() {
@@ -20,12 +22,15 @@ export default class MainScene extends Phaser.Scene {
     this.controls = new Controls(this)
 
     console.log(this)
-    
+
 
     const defaults = {
       tileSize: 16,
       tileSet: "metal",
-      roomSize: {x: 16, y: 8},
+      roomSize: {
+        x: 16,
+        y: 8
+      },
       defaultBackgroundTile: 27,
       backgroundTileFrom: 0,
       backgroundTileTo: 59,
@@ -40,7 +45,7 @@ export default class MainScene extends Phaser.Scene {
         right: 117
       },
 
- outerWall: {
+      outerWall: {
         leftTop: 91,
         rightTop: 92,
         leftBottom: 94,
@@ -51,7 +56,7 @@ export default class MainScene extends Phaser.Scene {
         right: 101
       },
 
- platForm: {
+      platform: {
         left: 77,
         middle: 68,
         right: 80
@@ -59,17 +64,17 @@ export default class MainScene extends Phaser.Scene {
     }
 
     this.structure = new Structure(8, 6, defaults, this);
-    
+
     this.zoomState = 0
     this.interruptZoom = false
     this.structure.drawMap();
-  
-    
+
+
     this.player = new Player(this, this.structure.startingRoom.x + 90, this.structure.startingRoom.y + 90)
     this.physics.add.collider(this.player, this.structure.walls)
     this.physics.add.collider(this.player, this.structure.doorGroup, this.handleCollision)
     this.setUpCamera();
-   
+
   }
 
   handleCollision(active, target) {
@@ -77,16 +82,16 @@ export default class MainScene extends Phaser.Scene {
   }
 
   setUpCamera() {
-		this.cameras.main.startFollow(this.player, true, 0.2, 0.2, 0, 50);
-		this.cameras.main.setDeadzone(20, 5);
-		this.cameras.main.setBounds(0, 0, this.structure.map.width, this.structure.map.height);
-		this.cameras.main.setZoom(4);
+    this.cameras.main.startFollow(this.player, true, 0.2, 0.2, 0, 50);
+    this.cameras.main.setDeadzone(20, 5);
+    this.cameras.main.setBounds(0, 0, this.structure.map.width, this.structure.map.height);
+    this.cameras.main.setZoom(4);
   }
-  
+
   setZoom() {
-    if(this.interruptZoom) return
+    if (this.interruptZoom) return
     this.interruptZoom = true
-    switch(this.zoomState) {
+    switch (this.zoomState) {
       case 0:
         this.cameras.main.setZoom(0.5)
         this.zoomState = 1
@@ -110,8 +115,8 @@ export default class MainScene extends Phaser.Scene {
     if (this.controls.showDebug.isDown) {
       console.log(`${this.interruptZoom} ${this.zoomState}`)
       this.setZoom()
-  } else {
+    } else {
       this.interruptZoom = false
-  }
+    }
   }
 }
