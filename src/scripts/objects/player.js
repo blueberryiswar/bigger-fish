@@ -6,9 +6,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.setZ(40)
         // enable physics
         this.scene.physics.world.enable(this);
-
+        this.speed = 100
+        this.jump = 250
         this.body.setSize(14, 18);
         this.body.setOffset(0, 6);
+
+        this.setBounce(0.2, 0.1)
 
         this.scene.add.existing(this);
         this.scene.anims.create({
@@ -26,16 +29,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     update(time, delta) {
         //const speed = 20 * delta / 100
-        if (this.scene.controls.left() && this.body.touching.down) {
-            this.setVelocityX(-160);
-        } else if (this.scene.controls.right() && this.body.touching.down) {
-            this.setVelocityX(160);
+        if (this.scene.controls.left()) {
+            this.setVelocityX(this.speed * -1);
+        } else if (this.scene.controls.right()) {
+            this.setVelocityX(this.speed);
         } else if (this.body.touching.down) {
             this.setVelocityX(0);
         }
 
         if (this.scene.controls.up() && this.body.touching.down) {
-            this.setVelocityY(-330);
+            this.setVelocityY(this.jump * -1);
         }
     }
 

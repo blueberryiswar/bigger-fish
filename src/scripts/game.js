@@ -21,6 +21,11 @@ const config = {
       debug: true,
       gravity: { y: 400 }
     }
+  },
+  fps: {
+    target: 60,
+    min: 30,
+    forceSetTimeout: true
   }
 }
 
