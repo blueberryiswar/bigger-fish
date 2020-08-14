@@ -9,9 +9,9 @@ const DEFAULT_WIDTH = DEFAULT_HEIGHT / 9 * 16
 
 const config = {
   type: Phaser.WEBGL,
-  backgroundColor: '#ffffff',
-  width: DEFAULT_WIDTH,
-  height: DEFAULT_HEIGHT,
+  backgroundColor: '#000000',
+  width: 1280,
+  height: 720,
   pixelArt: true,
   roundPixels: true,
   scene: [PreloadScene, MainScene],

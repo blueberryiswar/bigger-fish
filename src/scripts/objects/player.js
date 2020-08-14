@@ -10,6 +10,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.jump = 250
         this.body.setSize(14, 18);
         this.body.setOffset(0, 6);
+        this.facing = "right"
 
         this.setBounce(0.2, 0.1)
 
@@ -28,11 +29,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(time, delta) {
-        //const speed = 20 * delta / 100
         if (this.scene.controls.left()) {
-            this.setVelocityX(this.speed * -1);
+            this.setVelocityX(this.speed * -1)
+            if(this.facing !== "left") {
+                console.log(this)
+                this.setFlipX(true)
+                this.facing = "left"
+            }
         } else if (this.scene.controls.right()) {
             this.setVelocityX(this.speed);
+            if(this.facing !== "right") {
+                this.setFlipX(false)
+                this.facing = "right"
+            }
         } else if (this.body.touching.down) {
             this.setVelocityX(0);
         }
