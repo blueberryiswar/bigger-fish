@@ -4,8 +4,9 @@ export default class RoomPlaceholder {
     constructor(x, y, remainingHeight, remainingLength, defaults) {
         this.x = x
         this.y = y
-        this.width = Phaser.Math.Between(1, ((3 > remainingLength) ? remainingLength : 3))
+        this.width = Phaser.Math.Between(1, ((3 > remainingLength) ? remainingLength : 2))
         this.height = Phaser.Math.Between(1, ((3 > remainingHeight) ? remainingHeight : 3))
+        if(this.height === 3) this.width = 1
         this.defaults = defaults
         this.doors = []
         this.name = `Room ${y} ${x}`

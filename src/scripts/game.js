@@ -8,7 +8,7 @@ const DEFAULT_WIDTH = DEFAULT_HEIGHT / 9 * 16
 
 
 const config = {
-  type: Phaser.AUTO,
+  type: Phaser.WEBGL,
   backgroundColor: '#ffffff',
   width: DEFAULT_WIDTH,
   height: DEFAULT_HEIGHT,

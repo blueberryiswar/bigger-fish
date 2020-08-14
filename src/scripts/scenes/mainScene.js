@@ -26,24 +26,40 @@ export default class MainScene extends Phaser.Scene {
     const defaults = {
       tileSize: 16,
       tileSet: "metal",
-      roomSize: {x: 28, y: 16},
+      roomSize: {x: 16, y: 8},
       defaultBackgroundTile: 27,
       backgroundTileFrom: 0,
       backgroundTileTo: 59,
       innerWall: {
-        leftTop: 97,
-        rightTop: 98,
-        leftBottom: 99,
-        rightBottom: 100,
-        left: 101,
+        leftTop: 119,
+        rightTop: 120,
+        leftBottom: 122,
+        rightBottom: 121,
+        left: 115,
         top: 111,
         bottom: 113,
-        left: 115,
         right: 117
+      },
+
+ outerWall: {
+        leftTop: 91,
+        rightTop: 92,
+        leftBottom: 94,
+        rightBottom: 93,
+        left: 83,
+        top: 95,
+        bottom: 103,
+        right: 101
+      },
+
+ platForm: {
+        left: 77,
+        middle: 68,
+        right: 80
       }
     }
 
-    this.structure = new Structure(10, 8, defaults, this);
+    this.structure = new Structure(8, 6, defaults, this);
     //this.structure = new Structure(4,4,defaults, this)
     this.zoomState = 0
     this.interruptZoom = false
@@ -51,6 +67,7 @@ export default class MainScene extends Phaser.Scene {
 
     
     this.player = new Player(this, this.structure.startingRoom.x + 90, this.structure.startingRoom.y + 90)
+    this.physics.add.collider(this.player, this.structure.walls)
     this.setUpCamera();
    
   }
@@ -85,19 +102,12 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-   
-
-    const speed = 20 * delta / 100
-
-    if(this.controls.left()) this.player.setX(Phaser.Math.FloorTo(this.player.x - speed))
-    if(this.controls.up()) this.player.setY(Phaser.Math.FloorTo(this.player.y - speed))
-    if(this.controls.right()) this.player.setX(Phaser.Math.FloorTo(this.player.x + speed))
-    if(this.controls.down()) this.player.setY(Phaser.Math.FloorTo(this.player.y + speed))
-    if(this.controls.showDebug.isDown) {
+    this.player.update(time, delta)
+    if (this.controls.showDebug.isDown) {
       console.log(`${this.interruptZoom} ${this.zoomState}`)
       this.setZoom()
-    } else {
+  } else {
       this.interruptZoom = false
-    }
+  }
   }
 }
