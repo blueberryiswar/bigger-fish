@@ -102,9 +102,11 @@ export default class Structure {
             this.doorGroup.createDoor(this.doors[i])
         }
         
-        for(let i = 0; i < this.platforms.length; i++) {
-            console.log(this.platforms[i])
-            this.walls.create(this.platforms[i].x, this.platforms[i].y, this.defaults.tileSet, this.platforms[i].sprite)
+        while(this.platforms.length > 1) {
+            console.log(this.platforms)
+            const platform = this.platforms.pop()
+            console.log(platform)
+            this.walls.create(platform.x, platform.y, this.defaults.tileSet, platform.sprite)
         }
     }
 }

@@ -13,7 +13,7 @@ const config = {
   width: 1280,
   height: 720,
   pixelArt: true,
-  roundPixels: true,
+  
   scene: [PreloadScene, MainScene],
   physics: {
     default: 'arcade',
@@ -21,11 +21,6 @@ const config = {
       debug: true,
       gravity: { y: 400 }
     }
-  },
-  fps: {
-    target: 60,
-    min: 30,
-    forceSetTimeout: true
   }
 }
 
